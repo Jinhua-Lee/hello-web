@@ -13,7 +13,7 @@
     <h1 style="color: darkmagenta; text-align: center">登录成功~！</h1>
     <div align="center">
         <strong>${msg}</strong><br><br>
-        <a href="UserServlet?method=showall">
+        <a href="UserServlet?method=showAll">
             <input type="button" value="查看所有用户" />
         </a>
         <a href="query.jsp">

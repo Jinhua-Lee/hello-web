@@ -11,6 +11,7 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 用户访问Dao实现
@@ -84,7 +85,6 @@ public class UserDaoImpl implements UserDao {
     public int deleteUserById(int id) {
         int row = 0;
         String sql = "Delete From Usr Where ID = ?";
-//		row = MyDbUtils.executeUpdate(sql, id);
 
         try {
             row = qr.update(sql, id);
@@ -106,11 +106,6 @@ public class UserDaoImpl implements UserDao {
         int row = 0;
         String sql = "Update Usr set " +
                 "Name = ?, Pwd = ?, Sex = ?, Home = ?, Info = ? Where id = ?";
-//		row = MyDbUtils.executeUpdate(sql,
-//				user.getName(), user.getPwd(),
-//				user.getSex(), user.getHome(), user.getInfo(),
-//				user.getId());
-
         try {
             row = qr.update(sql, user.getName(), user.getPwd(),
                     user.getSex(), user.getHome(), user.getInfo(),
@@ -149,16 +144,16 @@ public class UserDaoImpl implements UserDao {
      */
     private String getWhere(User user, StringBuilder sb) {
         if (!user.getName().trim().isEmpty() && user.getName() != null) {
-            sb.append(" And Name = '" + user.getName() + "' ");
+            sb.append(" And Name = '").append(user.getName()).append("' ");
         }
         if (!user.getSex().trim().isEmpty() && user.getSex() != null) {
-            sb.append(" And Sex = '" + user.getSex() + "' ");
+            sb.append(" And Sex = '").append(user.getSex()).append("' ");
         }
         if (!user.getHome().trim().isEmpty() && user.getHome() != null) {
-            sb.append(" And Home = '" + user.getHome() + "' ");
+            sb.append(" And Home = '").append(user.getHome()).append("' ");
         }
         if (!user.getInfo().trim().isEmpty() && user.getInfo() != null) {
-            sb.append(" And Info = '" + user.getInfo() + "' ");
+            sb.append(" And Info = '").append(user.getInfo()).append("' ");
         }
         return sb.toString();
     }
@@ -183,7 +178,7 @@ public class UserDaoImpl implements UserDao {
         String sql = getWhere(user, new StringBuilder("Select * From Usr Where 1 = 1 "));
 
         try {
-            List<User> users = qr.query(sql, new BeanListHandler<User>(User.class));
+            List<User> users = qr.query(sql, new BeanListHandler<>(User.class));
             pageBean.setBeanList(users);
             return pageBean;
         } catch (SQLException e) {
@@ -209,7 +204,7 @@ public class UserDaoImpl implements UserDao {
         // 2. 得到总记录数
         String countSql = getWhere(user, new StringBuilder("Select Count(*) From Usr Where 1 = 1 "));
         try {
-            Number num = (Number) qr.query(countSql, new ScalarHandler<>());
+            Number num = qr.query(countSql, new ScalarHandler<>());
             int totalRecord = num.intValue();
             pb.setTotalRecord(totalRecord);
 
@@ -234,4 +229,16 @@ public class UserDaoImpl implements UserDao {
         return pb;
     }
 
+    @Override
+    public User findUserByName(String name) {
+        if (Objects.isNull(name) || name.isEmpty()) {
+            return null;
+        }
+        String byNameSql = "select * from usr where name = ?";
+        try {
+            return qr.query(byNameSql, new BeanHandler<>(User.class), name);
+        } catch (SQLException se) {
+            throw new RuntimeException("按姓名查询用户出错！！！ " + se);
+        }
+    }
 }

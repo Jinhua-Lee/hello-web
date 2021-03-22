@@ -12,7 +12,7 @@
             <input type="hidden" name="method" value="register">
             <p>姓名：<input type="text" name="name">${errors.name}</p>
             <p>密码：<input type="password" name="pwd">${errors.pwd}</p>
-            <p>密码：<input type="password" name="pwdconfig">${errors.pwdconfig}</p>
+            <p>密码：<input type="password" name="pwdConfig">${errors.pwdconfig}</p>
             <p>性别：
                 <input type="radio"value="男" name="sex" checked>男&nbsp;
                 <input type="radio" name="sex" value="女">女</p>

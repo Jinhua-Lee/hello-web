@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -71,49 +72,50 @@ public class UserServlet extends BaseServlet {
         String info = req.getParameter("info");
 
         User user = new User(name, pwd, sex, home, info);
-        String pwdConfig = req.getParameter("pwdconfig");
-
+        String pwdConfig = req.getParameter("pwdConfig");
+        final int mapInitSize = 8;
         // 进行表单校验
-        Map<String, String> errors = new HashMap<>();
+        Map<String, String> errors = new HashMap<>(mapInitSize);
         // 用户名校验
-        if (name.trim().isEmpty()) {
+        if (Objects.isNull(name) || name.trim().isEmpty()) {
             errors.put("name", "用户名不能为空！");
         } else if (name.length() < 3 || name.length() > 15) {
             errors.put("name", "用户名长度必须在3-14之间！");
-        }
-        // 密码校验
-        if (pwd.length() < 4 || pwd.length() > 15) {
-            errors.put("pwd", "密码长度必须在4-15之间！");
-        } else if (pwd.trim().isEmpty()) {
-            errors.put("pwd", "密码不能为空！");
+        } else if (Objects.nonNull(userService.findUserByName(name))) {
+            errors.put("name", "用户名已经存在！！！");
         }
 
+        // 密码校验
+        if (Objects.isNull(pwd) || pwd.trim().isEmpty()) {
+            errors.put("pwd", "密码不能为空！");
+        } else if (pwd.length() < 4 || pwd.length() > 15) {
+            errors.put("pwd", "密码长度必须在4-15之间！");
+        }
         // 密码确认框校验
         if (!pwdConfig.equals(pwd)) {
-            errors.put("pwdconfig", "密码不匹配！");
+            errors.put("pwdConfig", "密码不匹配！");
         }
 
         // 性别校验
-        if (sex.isEmpty()) {
+        if (Objects.isNull(sex) || sex.trim().isEmpty()) {
             errors.put("sex", "性别不能为空！");
         }
-        // 家乡
-        if (home.isEmpty()) {
+        // 家乡校验
+        if (Objects.isNull(home) || home.trim().isEmpty()) {
             errors.put("home", "家乡不能为空！");
         }
 
         if (errors.size() > 0) {
             // 保存errors到request域
             req.setAttribute("errors", errors);
-            // 注册失败则弹出提示，并返回到该页面
         }
-
         // 若注册成功则跳转到登录页面
         else {
             if (userService.register(user)) {
                 return "/login.jsp";
             }
         }
+        // 注册失败则弹出提示，并返回到该页面
         return "/register.jsp";
     }
 
@@ -133,7 +135,7 @@ public class UserServlet extends BaseServlet {
 
         if (userService.deleteUser(uid)) {
             // 转发到该页
-            return "/UserServlet?method=showall";
+            return "/UserServlet?method=showAll";
         } else {
             // 若失败，则弹窗提示并且重定向到登录页面
             return "/login.jsp";
@@ -149,14 +151,14 @@ public class UserServlet extends BaseServlet {
      * @throws ServletException servlet异常
      * @throws IOException      IO异常
      */
-    public String showall(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public String showAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PageBean<User> pageBean = userService.getUserAll();
 
         // 设置页面参数
         req.setAttribute("pageBean", pageBean);
 
         // 转发到所有用户信息页面
-        return "/showall.jsp";
+        return "/showAll.jsp";
     }
 
     /**
@@ -178,7 +180,6 @@ public class UserServlet extends BaseServlet {
             Map<String, String[]> map1 = new HashMap<>(mapSize);
             map1.putAll(map);
             if (beanClass.equals(User.class)) {
-                Set<String> set = map1.keySet();
                 String methodKey = "method";
                 if (map1.get(methodKey) != null) {
                     map1.remove(methodKey);
@@ -215,7 +216,7 @@ public class UserServlet extends BaseServlet {
         // 进行更新操作
         if (userService.updateUserInfo(bean)) {
             // 转到展示所有用户的页面
-            return "/UserServlet?method=showall";
+            return "/UserServlet?method=showAll";
         }
         return "/login.jsp";
     }

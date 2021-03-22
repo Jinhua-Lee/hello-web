@@ -6,6 +6,8 @@ import com.dao.DaoFactory;
 import com.dao.UserDao;
 import com.service.UserService;
 
+import java.util.Objects;
+
 /**
  * 用户服务实现类
  *
@@ -41,12 +43,6 @@ public class UserServiceImpl implements UserService {
         return flag;
     }
 
-    /**
-     * 通过id值查找，更新用户信息
-     *
-     * @param user 要更新到的用户实体
-     * @return 返回更新结果
-     */
     @Override
     public boolean updateUserInfo(User user) {
         boolean flag = false;
@@ -57,13 +53,6 @@ public class UserServiceImpl implements UserService {
         return flag;
     }
 
-    /**
-     * 多条件组合查询
-     * 调用DAO层的查询方式
-     *
-     * @param user 用户实体
-     * @return 返回符合条件的用户集合
-     */
     @Override
     public PageBean<User> multiConditionQuery(User user) {
         return userDao.multiConditionQuery(user);
@@ -72,5 +61,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageBean<User> findAll(int pageCurrent, int pageSize, User user) {
         return userDao.findAll(pageCurrent, pageSize, user);
+    }
+
+    @Override
+    public User findUserByName(String name) {
+        return userDao.findUserByName(name);
     }
 }

@@ -67,4 +67,12 @@ public interface UserService {
      * @return 分页用户信息
      */
     PageBean<User> findAll(int pageCurrent, int pageSize, User user);
+
+    /**
+     * 根据用户名找用户
+     *
+     * @param name 用户名
+     * @return 用户
+     */
+    User findUserByName(String name);
 }
