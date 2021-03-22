@@ -40,7 +40,7 @@ public class UserDaoImpl implements UserDao {
         try {
             // 获取初始总记录数和所有记录
             users = qr.query(sql, new BeanListHandler<>(User.class));
-            Number num = (Number) qr.query(countSql, new ScalarHandler<>());
+            Number num = qr.query(countSql, new ScalarHandler<>());
             pageBean.setTotalRecord(num.intValue());
             pageBean.setBeanList(users);
             pageBean.setTotalPages();
@@ -83,7 +83,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public int deleteUserById(int id) {
-        int row = 0;
+        int row;
         String sql = "Delete From Usr Where ID = ?";
 
         try {
@@ -219,7 +219,7 @@ public class UserDaoImpl implements UserDao {
                 new StringBuilder("Select * From Usr Where 1 = 1 "))).append(" limit ?, ?");
         List<User> users = null;
         try {
-            users = qr.query(limitSql.toString(), new BeanListHandler<User>(User.class),
+            users = qr.query(limitSql.toString(), new BeanListHandler<>(User.class),
                     (pageCurrent - 1) * pageSize, pageSize);
         } catch (SQLException e) {
             e.printStackTrace();

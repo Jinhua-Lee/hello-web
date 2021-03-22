@@ -40,7 +40,7 @@ public interface UserService {
      * @param id 用户ID
      * @return 删除结果
      */
-    public boolean deleteUser(int id);
+    boolean deleteUser(int id);
 
     /**
      * 通过ID编号更新用户信息
