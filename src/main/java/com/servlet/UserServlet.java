@@ -21,6 +21,7 @@ import java.util.Set;
  *
  * @author Jinhua
  */
+@SuppressWarnings("all")
 public class UserServlet extends BaseServlet {
 
     private final UserService userService = new UserServiceImpl();
