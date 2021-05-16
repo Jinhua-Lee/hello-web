@@ -7,6 +7,7 @@ import com.service.impl.UserServiceImpl;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.util.Set;
  * @author Jinhua
  */
 @SuppressWarnings("all")
+@WebServlet(name = "UserServlet", urlPatterns = "/UserServlet")
 public class UserServlet extends BaseServlet {
 
     private final UserService userService = new UserServiceImpl();

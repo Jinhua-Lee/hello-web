@@ -1,6 +1,7 @@
 package com.filter;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.IOException;
  *
  * @author Jinhua
  */
+@WebFilter(filterName = "VisitFilter", urlPatterns = "/*")
 public class VisitFilter implements Filter {
 
     @Override

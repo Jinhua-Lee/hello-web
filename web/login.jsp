@@ -28,12 +28,28 @@
             <input type="password" name="pwd"/>
         </label><br/><br/>
     </div>
-    <input type="submit" name="subtn" value="登录"/>&nbsp;&nbsp;
-    <input type="reset" name="resbtn" value="重置"/>
+    <div class="log_in">
+        <strong>请输入验证码：</strong>
+        <label>
+            <input type="text" name="verifyCode"/>
+        </label><br/><br/>
+    </div>
+    <div class="log_in">
+        <img id="verify" src="VerifyCodeServlet?method=getVerifyPic" alt="验证码">
+        <a href="javascript:_change()">看不清，换一张</a><br>
+    </div>
+    <input type="submit" value="登录"/>&nbsp;&nbsp;&nbsp;
+    <input type="reset" value="重置"/>
 </form>
 
 <a href="register.jsp">
     <input type="button" value="新用户注册">
 </a>
+<script type="text/javascript">
+    function _change() {
+        const picSrc = document.getElementById("verify");
+        picSrc.src = "VerifyCodeServlet?method=getVerifyPic&a=" + new Date().getTime();
+    }
+</script>
 </body>
 </html>
