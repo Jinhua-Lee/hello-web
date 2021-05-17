@@ -89,7 +89,7 @@ public class VerifyCode {
     public BufferedImage getImage() {
         BufferedImage image = createImage();
         Graphics2D g2 = (Graphics2D) image.getGraphics();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 4; i++) {
             String s = randomChar() + "";
             sb.append(s);

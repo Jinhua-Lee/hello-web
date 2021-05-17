@@ -12,11 +12,11 @@ import java.lang.reflect.Method;
  *
  * @author Jinhua
  */
-public class BaseServlet extends HttpServlet {
+public abstract class BaseServlet extends HttpServlet {
 
     @Override
     @SneakyThrows
-    protected void service(HttpServletRequest req, HttpServletResponse resp) {
+    protected final void service(HttpServletRequest req, HttpServletResponse resp) {
         // 获取请求方法
         String method = req.getParameter("method");
         System.out.println("正在执行 " + method + "方法");
